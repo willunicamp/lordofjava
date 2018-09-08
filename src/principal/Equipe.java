@@ -45,7 +45,7 @@ public class Equipe {
 		}
 	}
 	
-	public ArrayList<Personagem> getEquipe(){
+	public final ArrayList<Personagem> getEquipe(){
 		return grupo;
 	}
 	

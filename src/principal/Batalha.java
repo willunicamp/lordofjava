@@ -1,11 +1,18 @@
 package principal;
 
+import java.io.BufferedReader;
 import personagens.Habilidade;
 import personagens.Classe;
 import personagens.Personagem;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -17,6 +24,7 @@ public class Batalha {
 	boolean vezAliados;
 	boolean fim;
 	Clip clip;
+	static int turno = 0;
 	
 	public Batalha(){
 		s = new Scanner(System.in);
@@ -53,70 +61,74 @@ public class Batalha {
 	}
 	
 	public void inicio(){
-		Personagem auxPersonagem;
-		Equipe auxEquipe;
+		Personagem inimigo;
+		Equipe equipeInimiga;
+		BufferedReader fases;
+		Path arquivo;
+		String linha, nome;
+		Classe.Tipo tipo;
+		int nivel;
 		print("==========================");
 		print("=    O SENHOR DO JAVA    =");
 		print("==========================\n");
 		
-		ArrayList<Equipe> fases;
+		//ArrayList<Equipe> fases;
 		//escolha dos personagens
 		escolhePersonagens();
 		
 		
 		//crio as fases (batalhas)
-		fases = new ArrayList<Equipe>();
+		// = new ArrayList<Equipe>();
 		
-		//primeira fase
-		auxEquipe = new Equipe();
-		auxPersonagem = new Personagem("Ogro", Classe.Tipo.MONSTRO);
-		auxEquipe.adicionaPersonagem(auxPersonagem);
-		fases.add(auxEquipe);
-		
-		//segunda fase
-		auxEquipe = new Equipe();
-		auxPersonagem = new Personagem("Orc", Classe.Tipo.MONSTRO);
-		auxEquipe.adicionaPersonagem(auxPersonagem);
-		auxPersonagem = new Personagem("Troll", Classe.Tipo.MONSTRO);
-		auxEquipe.adicionaPersonagem(auxPersonagem);
-		fases.add(auxEquipe);
-		
-		//terceira fase
-		auxEquipe = new Equipe();
-		auxPersonagem = new Personagem("Orc", Classe.Tipo.MONSTRO);
-		auxEquipe.adicionaPersonagem(auxPersonagem);
-		auxPersonagem = new Personagem("Troll", Classe.Tipo.MONSTRO);
-		auxEquipe.adicionaPersonagem(auxPersonagem);
-		auxPersonagem = new Personagem("Forasteiro", Classe.Tipo.GUERREIRO);
-		auxEquipe.adicionaPersonagem(auxPersonagem);
-		fases.add(auxEquipe);
-		
-		//quarta fase
-		auxEquipe = new Equipe();
-		auxPersonagem = new Personagem("Orc", Classe.Tipo.MONSTRO);
-		auxEquipe.adicionaPersonagem(auxPersonagem);
-		auxPersonagem = new Personagem("Troll", Classe.Tipo.MONSTRO);
-		auxEquipe.adicionaPersonagem(auxPersonagem);
-		auxPersonagem = new Personagem("Forasteiro", Classe.Tipo.GUERREIRO);
-		auxPersonagem.sobeParaNivel(2);
-		auxEquipe.adicionaPersonagem(auxPersonagem);
-		fases.add(auxEquipe);
-		
-		auxEquipe = new Equipe();
-		auxPersonagem = new Personagem("BOSS", Classe.Tipo.MONSTRO);
-		auxPersonagem.sobeParaNivel(2);
-		auxEquipe.adicionaPersonagem(auxPersonagem);
-		fases.add(auxEquipe);
-		
-		for(Equipe e: fases){
-			if(!fim){
-				playSomEpico();
-				Lutar(e);
-				paraSomEpico();
+		//leio o arquivo de fases
+		arquivo = Paths.get("game.txt");
+		if(Files.exists(arquivo)){
+			try {
+				fases = Files.newBufferedReader(arquivo);
+				equipeInimiga = new Equipe();
+				
+				while((linha = fases.readLine()) != null){
+					String[] comando = linha.split(" ");
+					if(comando[0].equals("fase")){
+						if(!fim){
+							playSomEpico();
+							Lutar(equipeInimiga);
+							paraSomEpico();
+						}
+						equipeInimiga = new Equipe();
+					}else{
+						nome = comando[0];
+						tipo = selecionaTipo(comando[1]);
+						nivel = Integer.parseInt(comando[2]);
+						inimigo = new Personagem(nome, Classe.Tipo.MAGO);
+						equipeInimiga.adicionaPersonagem(inimigo);
+					}
+					
+				}
+			} catch (IOException ex) {
+				Logger.getLogger(Batalha.class.getName()).log(Level.SEVERE, null, ex);
 			}
 		}
 	}
 	
+	private Classe.Tipo selecionaTipo(String tipo){
+		Classe.Tipo retorno = null;
+		switch(tipo){
+			case "monstro":
+				retorno = Classe.Tipo.MONSTRO;
+			break;
+			case "mago":
+				retorno = Classe.Tipo.MAGO;
+			break;
+			case "arqueiro":
+				retorno = Classe.Tipo.ARQUEIRO;
+			break;
+			case "guerreiro":
+				retorno = Classe.Tipo.GUERREIRO;
+			break;
+		}
+		return retorno;
+	}
 	public void escolhePersonagens(){
 		this.aliados = new Equipe();
 		Personagem pAux = null;
@@ -158,7 +170,7 @@ public class Batalha {
 
 		int ataque;
 		boolean atacou = false;
-		print("Iniciando batalha entre Aliados e Inimigos:");
+		print("Iniciando batalha "+ (++Batalha.turno) +" entre Aliados e Inimigos:");
 		
 		while(aliados.contaConscientes() > 0 && inimigos.contaConscientes() > 0 && !fim){
 			atacou = false;
