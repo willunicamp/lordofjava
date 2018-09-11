@@ -127,6 +127,7 @@ public class Batalha {
 						tipo = selecionaTipo(comando[1]);
 						nivel = Integer.parseInt(comando[2]);
 						inimigo = new Personagem(nome, tipo);
+						inimigo.sobeParaNivel(nivel);
 						equipeInimiga.adicionaPersonagem(inimigo);
 					}
 					
@@ -164,11 +165,11 @@ public class Batalha {
 		print("Crie 3 personagens.");
 		for(i=0;i<3;i++){
 			print("Digite o nome do personagem:");
-			nome = s.next();
+			nome = s.nextLine();
 			do{
 				print("Escolha a classe do personagem");
 				print("1 - Guerreiro, 2 - Arqueiro, 3 - Mago");
-				tipo = s.nextInt();
+				tipo = leiaInt();
 			}while(tipo <= 0 || tipo > 3);
 			switch(tipo){
 				case 1:
@@ -224,7 +225,7 @@ public class Batalha {
 					print("--------------------------------------------------------");
 					print(atacante.getNome()+", escolha seu ataque:");
 					print(atacante.toString());
-					ataque = s.nextInt();
+					ataque = leiaInt();
 					habilidade = atacante.getClasse().getHabilidade(ataque);
 					
 					if(habilidade != null){
@@ -233,7 +234,7 @@ public class Batalha {
 							do{
 								print("Escolha seu aliado que receberá "+habilidade.getNome()+":");
 								print(aliados.toString());
-								numAliado = s.nextInt();
+								numAliado = leiaInt();
 								amigo = aliados.getPersonagem(numAliado);
 							}while(amigo == null);
 							atacou = atacante.ataca(habilidade, amigo);
@@ -247,7 +248,7 @@ public class Batalha {
 								do{
 									print("Escolha quem recebe o ataque "+habilidade.getNome()+":");
 									print(adversarios.toString());
-									numAdversario = s.nextInt();
+									numAdversario = leiaInt();
 									adversario = adversarios.getPersonagem(numAdversario);
 								}while(adversario == null);
 								
@@ -257,6 +258,11 @@ public class Batalha {
 					}
 					if(atacou == false){
 						print("Ataque inválido!");
+						if(atacante != null && habilidade != null){
+							if(atacante.getPM() < habilidade.getCustoPM(atacante)){
+								print("Não há pontos de magia suficientes.");
+							}
+						}
 					}
 				}while(atacou == false);
 				
@@ -311,5 +317,17 @@ public class Batalha {
 		
 		return atacante;
 	}
-
+	
+	//como o ID zero não existe no jogo para nada, retorno de zero
+	//sera considerado invalido nas entradas. Assim, esse metodo pode
+	//ser utilizado em todos os menus para entrada de inteiros e se valores
+	//invalidos forem digitados, a entrada eh solicitada 
+	private int leiaInt(){
+		String t = s.nextLine();
+		int r = 0;
+		if(t.matches("-?\\d+(\\.\\d+)?")){
+			r = Integer.parseInt(t);
+		}
+		return r;
+	}
 }
