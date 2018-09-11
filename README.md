@@ -97,5 +97,9 @@ O diagrama simplificado a seguir demonstra como deve ser a composição, agrega�
 A única classe que pede entrada de dados e exibe mensagens na tela é a **Batalha**, que controlará o jogo. A classe Main apenas deve chamar um objeto de Batalha no método main.
 Reforçando: Nenhuma classe pede entrada ou exibe saída em seus métodos, com exceção da classe Batalha. Dessa forma as classes que tratam os personagens (classes de dados) ficarão genéricas e podem ser facilmente adaptadas para um projeto com uma interface visual diferente.
 
-
+## Implementações Futuras
+* Interface gráfica
+* Itens para uso nas batalhas (classes já iniciadas no pacote src/itens)
+* Adicionar texto para criar uma história no arquivo game.txt
+* Opção para ramificação da história, permitindo diferentes finais
 
