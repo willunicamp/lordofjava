@@ -41,4 +41,9 @@ public class Mago extends Classe{
 		habilidades.add(new Habilidade("Cura Amigo",
 				7,false, fatorDano, fatorMana, true));
 	}
+	
+	@Override
+	public String toString(){
+		return "Mago";
+	}
 }

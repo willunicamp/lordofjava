@@ -40,4 +40,9 @@ public class Monstro extends Classe{
 		habilidades.add(new Habilidade("Grito Atordoante",
 				6,true, fatorDano, fatorMana, false));
 	}
+	
+	@Override
+	public String toString(){
+		return "Monstro";
+	}
 }

@@ -16,16 +16,14 @@
  */
 package principal;
 
+import personagens.*;
 import java.io.BufferedReader;
 import personagens.Habilidade;
-import personagens.Classe;
-import personagens.Personagem;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,6 +31,8 @@ import java.util.logging.Logger;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class Batalha {
 	Equipe aliados;
@@ -48,15 +48,25 @@ public class Batalha {
 	}
 	
 	private void playSomEpico(){
-	    try {
-	        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("epic.wav").getAbsoluteFile());
-	        clip = AudioSystem.getClip();
-	        clip.open(audioInputStream);
-	        clip.start();
-	    } catch(Exception ex) {
-	        System.out.println("Error with playing sound.");
-	        ex.printStackTrace();
-	    }
+	        AudioInputStream audioInputStream = null;
+		try {
+			audioInputStream = AudioSystem.getAudioInputStream(new File("epic.wav").getAbsoluteFile());
+			clip = AudioSystem.getClip();
+			clip.open(audioInputStream);
+			clip.start();
+		} catch (UnsupportedAudioFileException ex) {
+			Logger.getLogger(Batalha.class.getName()).log(Level.SEVERE, null, ex);
+		} catch (IOException ex) {
+			Logger.getLogger(Batalha.class.getName()).log(Level.SEVERE, null, ex);
+		} catch (LineUnavailableException ex) {
+			Logger.getLogger(Batalha.class.getName()).log(Level.SEVERE, null, ex);
+		} finally {
+			try {
+				audioInputStream.close();
+			} catch (IOException ex) {
+				Logger.getLogger(Batalha.class.getName()).log(Level.SEVERE, null, ex);
+			}
+		}
 	}
 	
 	private void paraSomEpico(){
@@ -116,7 +126,7 @@ public class Batalha {
 						nome = comando[0];
 						tipo = selecionaTipo(comando[1]);
 						nivel = Integer.parseInt(comando[2]);
-						inimigo = new Personagem(nome, Classe.Tipo.MAGO);
+						inimigo = new Personagem(nome, tipo);
 						equipeInimiga.adicionaPersonagem(inimigo);
 					}
 					
@@ -200,9 +210,9 @@ public class Batalha {
 				adversario = null;
 				espere(2);
 				print("Aliados: ");
-				printPersonagens(aliados);
+				print(aliados.toString());
 				print("\nInimigos: ");
-				printPersonagens(inimigos);
+				print(inimigos.toString());
 				
 				if(vezAliados){
 					adversarios = inimigos;
@@ -213,7 +223,7 @@ public class Batalha {
 				do{
 					print("--------------------------------------------------------");
 					print(atacante.getNome()+", escolha seu ataque:");
-					printHabilidades(atacante);
+					print(atacante.toString());
 					ataque = s.nextInt();
 					habilidade = atacante.getClasse().getHabilidade(ataque);
 					
@@ -222,7 +232,7 @@ public class Batalha {
 						if(habilidade.afetaAmigo()){
 							do{
 								print("Escolha seu aliado que receberá "+habilidade.getNome()+":");
-								printPersonagens(aliados);
+								print(aliados.toString());
 								numAliado = s.nextInt();
 								amigo = aliados.getPersonagem(numAliado);
 							}while(amigo == null);
@@ -236,7 +246,7 @@ public class Batalha {
 							}else{
 								do{
 									print("Escolha quem recebe o ataque "+habilidade.getNome()+":");
-									printPersonagens(adversarios);
+									print(adversarios.toString());
 									numAdversario = s.nextInt();
 									adversario = adversarios.getPersonagem(numAdversario);
 								}while(adversario == null);
@@ -274,23 +284,7 @@ public class Batalha {
 	public void print(String p){
 		System.out.println(p);
 	}
-	
-	private void printHabilidades(Personagem p){
-		print(String.format("%1$-3s %2$-18s %3$10s %4$4s %5$4s","Id","Habilidade","PM","Espera","Dano"));
-		for(Habilidade h: p.getClasse().getHabilidades()){
-			print(String.format("%1$-3s %2$-18s %3$10s %4$4s %5$4s",h.getID(),h.getNome(),h.getCustoPM(p),h.getTempo(),h.getDano(p)));
-		}
-	}
-	
-	private void printPersonagens(Equipe equipe){
-		print("--------------------------------------------------------");
-		print(String.format("%1$-3s %2$-18s %3$6s %4$4s %5$4s %6$4s %7$7s","Id","Nome","Nível","PV","PM","PE","Espera"));
-
-		for(Personagem p: equipe.getEquipe()){
-			print(String.format("%1$-3s %2$-18s %3$6s %4$4s %5$4s %6$4s %7$7s",p.getID(),p.getNome(),p.getNivel(),p.getPV(),p.getPM(),p.getPE(),p.getTempoEspera()));
-		}
-	}
-
+		
 	private Personagem escolheAtacante(Equipe inimigos){
 		Personagem atacante = null;
 		Personagem aliado, inimigo;

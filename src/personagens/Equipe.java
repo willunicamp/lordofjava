@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License 
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package principal;
+package personagens;
 
 import personagens.Personagem;
 import java.util.ArrayList;
@@ -94,6 +94,19 @@ public class Equipe {
                 }catch(ArrayIndexOutOfBoundsException e){
                     System.out.println(e.getMessage());
                 }
+		return retorno;
+	}
+	
+	@Override
+	public String toString(){
+		String retorno = "";
+		retorno += "--------------------------------------------------------\n";
+		retorno += String.format("%1$-3s %2$-18s %3$10s %4$6s %5$4s %6$4s %7$4s %8$7s\n","Id","Nome", "Classe","Nível","PV","PM","PE","Espera");
+
+		for(Personagem p: this.getEquipe()){
+			retorno += String.format("%1$-3s %2$-18s %3$10s %4$6s %5$4s %6$4s %7$4s %8$7s\n",
+				p.getID(),p.getNome(),p.getClasse().toString(),p.getNivel(),p.getPV(),p.getPM(),p.getPE(),p.getTempoEspera());
+		}
 		return retorno;
 	}
 }

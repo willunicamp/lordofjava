@@ -26,8 +26,6 @@ public class Personagem {
 	private int ID;
 	private static int ID_cont = 1;
 	
-
-	
 	public Personagem(String nome, Classe.Tipo classe){
 		this.setNome(nome);
 		this.setNivel(1);
@@ -175,7 +173,8 @@ public class Personagem {
 	//retorna true se subir de nivel
 	public boolean ganhaExpSobeNivel(int pontos){
 		boolean retorno = false;
-		int excedente, pexp;
+		int excedente = 0;
+		int pexp;
 		
 		//se pontos nao forem negativos, ok
 		if(pontos > 0){
@@ -184,14 +183,17 @@ public class Personagem {
 			if(pexp >= this.getNivel()*25){
 				//se tiver pontos necessarios pra subir de nivel,
 				//calculo o excedente e aumento nivel+1
-				excedente = pexp - this.getNivel()*25;
-				this.nivel += 1;
+				excedente = pexp - (this.getNivel()*25);
+				this.setNivel(this.getNivel()+1);
+				retorno = true;
 			}else{
 				//senao o excedente sera igual aos pontos ganhos
-				excedente = pontos;
+				//somados aos ja existentes
+				excedente = pexp;
 			}
-			//no final, somo o excedente em PE
-			this.setPE(this.getPE()+excedente);
+			//no final, o excedente fica nos pontos de experiencia
+			//para subir para o proximo nivel
+			this.setPE(excedente);
 		}
 		//retorna true se subir de nivel
 		return retorno;
@@ -225,5 +227,15 @@ public class Personagem {
 
 	public void setID() {
 		this.ID = Personagem.ID_cont++;
+	}
+	
+	@Override
+	public String toString(){
+		String retorno = "";
+		retorno += (String.format("%1$-3s %2$-18s %3$10s %4$4s %5$4s \n","Id","Habilidade","PM","Espera","Dano"));
+		for(Habilidade h: this.getClasse().getHabilidades()){
+			retorno += (String.format("%1$-3s %2$-18s %3$10s %4$4s %5$4s \n",h.getID(),h.getNome(),h.getCustoPM(this),h.getTempo(),h.getDano(this)));
+		}
+		return retorno;
 	}
 }

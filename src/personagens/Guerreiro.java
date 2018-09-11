@@ -43,4 +43,9 @@ public class Guerreiro extends Classe {
 		
 	}
 	
+	@Override
+	public String toString(){
+		return "Guerreiro";
+	}
+	
 }

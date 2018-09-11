@@ -59,7 +59,12 @@ public class Habilidade{
 		return tempo;
 	}
 	public void setTempo(int tempo) {
-		this.tempo = tempo;
+		if(tempo>0){
+			this.tempo = tempo;
+		}else{
+			//valor default no caso de tempo negativo ou zerado
+			this.tempo = 10;
+		}
 	}
 	public boolean afetaTodos() {
 		return this.afetaTodos;

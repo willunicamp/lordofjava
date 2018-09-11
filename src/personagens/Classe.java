@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 public abstract class Classe {
 	private int forca, agilidade, inteligencia;
-	protected ArrayList<Habilidade> habilidades;
+	ArrayList<Habilidade> habilidades;
 	
 	public enum Tipo{
 		GUERREIRO, ARQUEIRO, MAGO, MONSTRO;
@@ -86,4 +86,7 @@ public abstract class Classe {
 	public int getInteligencia(){
 		return this.inteligencia;
 	}
+	
+	@Override
+	public abstract String toString();
 }

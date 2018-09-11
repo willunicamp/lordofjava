@@ -24,6 +24,7 @@ public class Arqueiro extends Classe{
 		FatorDeAtributos fatorDano, fatorMana;
 		
 		//definicoes da skill Atirar Flecha
+		//forca, agilidade, inteligencia
 		fatorDano = new FatorDeAtributos(0.3f, 0.5f, 0.0f);
 		fatorMana = new FatorDeAtributos(0.0f, 0.0f, 0.0f);
 		habilidades.add(new Habilidade("Atirar Flecha",
@@ -40,5 +41,10 @@ public class Arqueiro extends Classe{
 		fatorMana = new FatorDeAtributos(0.0f, 0.2f, 1.0f);
 		habilidades.add(new Habilidade("Flecha Encantada",
 				7,false, fatorDano, fatorMana, false));
+	}
+	
+	@Override
+	public String toString(){
+		return "Arqueiro";
 	}
 }
