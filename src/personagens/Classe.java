@@ -23,7 +23,7 @@ public abstract class Classe {
 	ArrayList<Habilidade> habilidades;
 	
 	public enum Tipo{
-		GUERREIRO, ARQUEIRO, MAGO, MONSTRO;
+		GUERREIRO, ARQUEIRO, MAGO, MONSTRO, ANAO;
 	}
 	
 	public Classe(int forca, int agilidade, int inteligencia){

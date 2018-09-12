@@ -153,6 +153,9 @@ public class Batalha {
 			case "guerreiro":
 				retorno = Classe.Tipo.GUERREIRO;
 			break;
+                        case "anao":
+				retorno = Classe.Tipo.ANAO;
+			break;
 		}
 		return retorno;
 	}
@@ -168,7 +171,7 @@ public class Batalha {
 			nome = s.nextLine();
 			do{
 				print("Escolha a classe do personagem");
-				print("1 - Guerreiro, 2 - Arqueiro, 3 - Mago");
+				print("1 - Guerreiro, 2 - Arqueiro, 3 - Mago, 4 - Anão");
 				tipo = leiaInt();
 			}while(tipo <= 0 || tipo > 3);
 			switch(tipo){
@@ -180,7 +183,10 @@ public class Batalha {
 					break;
 				case 3:
 					pAux = new Personagem(nome, Classe.Tipo.MAGO);
-					break;		
+					break;	
+                                case 4:
+                                        pAux = new Personagem(nome, Classe.Tipo.ANAO);
+                                        break;	
 			}
 			aliados.adicionaPersonagem(pAux);
 		}

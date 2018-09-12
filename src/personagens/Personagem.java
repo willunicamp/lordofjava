@@ -38,7 +38,9 @@ public class Personagem {
 			this.classe = new Mago();
 		}else if(classe == Classe.Tipo.MONSTRO){
 			this.classe = new Monstro();
-		}
+		}else if(classe == Classe.Tipo.ANAO){
+                        this.classe = new Anao();
+                }
 		this.setPV(this.getMaxPV());
 		this.setPM(this.getMaxPM());
 		this.setTempoEspera(0);
