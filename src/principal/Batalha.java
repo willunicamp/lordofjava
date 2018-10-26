@@ -117,8 +117,9 @@ public class Batalha {
 					String[] comando = linha.split(" ");
 					if(comando[0].equals("fase")){
 						if(!fim){
+                                                    String texto = linha.substring(4);
 							playSomEpico();
-							Lutar(equipeInimiga);
+							Lutar(equipeInimiga, texto);
 							paraSomEpico();
 						}
 						equipeInimiga = new Equipe();
@@ -173,7 +174,7 @@ public class Batalha {
 				print("Escolha a classe do personagem");
 				print("1 - Guerreiro, 2 - Arqueiro, 3 - Mago, 4 - Anão");
 				tipo = leiaInt();
-			}while(tipo <= 0 || tipo > 3);
+			}while(tipo <= 0 || tipo > 4);
 			switch(tipo){
 				case 1:
 					pAux = new Personagem(nome, Classe.Tipo.GUERREIRO);
@@ -194,7 +195,7 @@ public class Batalha {
 	}
 	
 
-	public void Lutar(Equipe inimigos){
+	public void Lutar(Equipe inimigos, String texto){
 		Personagem atacante, amigo;
 		Habilidade habilidade;
 		Equipe adversarios;
@@ -204,6 +205,7 @@ public class Batalha {
 		int ataque;
 		boolean atacou = false;
 		print("Iniciando batalha "+ (++Batalha.turno) +" entre Aliados e Inimigos:");
+                print(texto);
 		
 		while(aliados.contaConscientes() > 0 && inimigos.contaConscientes() > 0 && !fim){
 			atacou = false;
@@ -244,6 +246,11 @@ public class Batalha {
 								amigo = aliados.getPersonagem(numAliado);
 							}while(amigo == null);
 							atacou = atacante.ataca(habilidade, amigo);
+                                                        print(amigo.getNome()+" recebeu "
+                                                               +habilidade.getNome()+" de "
+                                                               +atacante.getNome()+" removendo "
+                                                               +habilidade.getDano(atacante)+
+                                                                            " de dano.");
 						}else{
 							if(habilidade.afetaTodos()){
 								for(Personagem i: adversarios.getEquipe()){
@@ -259,6 +266,13 @@ public class Batalha {
 								}while(adversario == null);
 								
 								atacou = atacante.ataca(habilidade, adversario);
+                                                                if(atacou){
+                                                                    print(adversario.getNome()+" recebeu "
+                                                                        +habilidade.getNome()+" de "
+                                                                        +atacante.getNome()+" levando "+
+                                                                            habilidade.getDano(atacante)+
+                                                                            " de dano.");
+                                                                }
 							}
 						}
 					}
