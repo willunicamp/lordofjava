@@ -18,6 +18,7 @@ package personagens;
 
 import personagens.Personagem;
 import java.util.ArrayList;
+import utils.ConsoleColors;
 
 public class Equipe {
 	private ArrayList<Personagem> grupo;
@@ -104,8 +105,14 @@ public class Equipe {
 		retorno += String.format("%1$-3s %2$-18s %3$10s %4$6s %5$4s %6$4s %7$4s %8$7s\n","Id","Nome", "Classe","Nível","PV","PM","PE","Espera");
 
 		for(Personagem p: this.getEquipe()){
-			retorno += String.format("%1$-3s %2$-18s %3$10s %4$6s %5$4s %6$4s %7$4s %8$7s\n",
+                    if(p.getPV()<= 0){
+			retorno += String.format(ConsoleColors.RED+"%1$-3s %2$-18s %3$10s %4$6s %5$4s %6$4s %7$4s %8$7s\n"+ConsoleColors.RESET,
 				p.getID(),p.getNome(),p.getClasse().toString(),p.getNivel(),p.getPV(),p.getPM(),p.getPE(),p.getTempoEspera());
+                    }else{
+                    	retorno += String.format("%1$-3s %2$-18s %3$10s %4$6s %5$4s %6$4s %7$4s %8$7s\n",
+				p.getID(),p.getNome(),p.getClasse().toString(),p.getNivel(),p.getPV(),p.getPM(),p.getPE(),p.getTempoEspera());
+                        
+                    }
 		}
 		return retorno;
 	}
