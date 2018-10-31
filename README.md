@@ -102,8 +102,8 @@ Reforçando: Nenhuma classe pede entrada ou exibe saída em seus métodos, com e
 * Adicionar texto para criar uma história no arquivo game.txt
 
 ## Implementações Futuras
-* ~~ Interface gráfica ~~ 
-* ~~ Adicionar texto para criar uma história no arquivo game.txt ~~
+* ~~Interface gráfica~~ 
+* ~~Adicionar texto para criar uma história no arquivo game.txt~~
 * Itens para uso nas batalhas (classes já iniciadas no pacote src/itens)
 * Opção para ramificação da história, permitindo diferentes finais
 * Save game
