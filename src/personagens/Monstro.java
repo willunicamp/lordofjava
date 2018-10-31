@@ -45,4 +45,5 @@ public class Monstro extends Classe{
 	public String toString(){
 		return "Monstro";
 	}
+        
 }

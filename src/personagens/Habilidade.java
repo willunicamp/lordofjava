@@ -108,4 +108,9 @@ public class Habilidade{
 	public void setAfetaAmigo(boolean amigo) {
 		this.amigo = amigo;
 	}
+        
+        @Override
+        public String toString(){
+            return this.getNome();
+        }
 }

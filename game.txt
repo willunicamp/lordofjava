@@ -1,11 +1,10 @@
 Ogro monstro 1
 fase 3 amigos caminhavam tranquilamente pelo bosque quando, de repente, surge em sua frente um ser estranho. Nunca tinham visto nem ouvido falar em tal criatura, de aparência feia e gosmenta, balbuciando sons esquisitos e com cara de quem não está pra fazer amizades. O monstro corre na direção desses amigos com um porrete levantado. Ele vai atacar! Preparem-se heróis!!
-Ogro monstro 1
 Troll monstro 1
 Forasteiro guerreiro 1
 fase Em sua curiosidade, após derrotá-lo, os amigos seguem os rastros de onde o monstro maligno veio. Encontram uma caverna, de onde o tal monstro deve ter saído e, de trás de uma rocha, saem mais duas criaturas, uma mais feia que a outra, com a mesma ferocidade e sede de sangue da primeira.
 Troll monstro 1
 Zumbi guerreiro 2
-fase Os nossos heróis adentram a caverna, esse tipo de criatura não deve viver para ameaçar a paz dos aldeões que vivem próximos ao local. Mais ao fundo, se surpreendem, além de duas criaturas horrendas, deparam-se também com um homem cuja pele está podre, rodeado de moscas. Os seres malignos atacam sem pensar! Lutem heróis, lutem!!
-Maonacara monstro 3
+fase Os nossos heróis adentram a caverna, pois, esse tipo de criatura não deve viver para ameaçar a paz dos aldeões que vivem próximos ao local. Mais ao fundo, se surpreendem, além de duas criaturas horrendas, deparam-se também com um homem cuja pele está podre, rodeado de moscas. Os seres malignos atacam sem pensar! Lutem heróis, lutem!!
+Ignorante monstro 3
 fase Finalmente, após uma árdua vitória, nossos heróis chegam ao fundo da caverna. Um silencio mortal e suspeito toma conta da clareira que ali se encontra. De um beco escuro no canto da clareira, sai o pesadelo mais terrível, um monstro de 3 metros de altura, com um braço no lugar do nariz e um olhar aterrorizante de quem vê uma presa diante de si. A grande batalha vai começar...

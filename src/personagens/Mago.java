@@ -46,4 +46,5 @@ public class Mago extends Classe{
 	public String toString(){
 		return "Mago";
 	}
+        
 }

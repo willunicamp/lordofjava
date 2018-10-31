@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" fx:id="anpPrincipal" prefHeight="135.0" prefWidth="140.0" style="-fx-background-color: rgba(255,255,255,0.2); -fx-border-radius: 5px;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.PersonagemController">
+   <children>
+      <ProgressBar id="prgTempo" fx:id="proEspera" layoutY="146.0" prefHeight="0.0" prefWidth="140.0" progress="0.0" style="-fx-accent: yellow;" styleClass="progress" stylesheets="@ui.css" />
+      <ImageView fx:id="imgPersonagem" fitHeight="95.0" fitWidth="116.0" layoutX="12.0" layoutY="49.0" pickOnBounds="true" preserveRatio="true" />
+      <Label fx:id="lblNome" prefHeight="14.0" prefWidth="142.0" text="Nome" textAlignment="CENTER">
+         <font>
+            <Font name="System Bold" size="11.0" />
+         </font></Label>
+      <Label fx:id="lblStatus" layoutX="2.0" layoutY="16.0" prefWidth="98.0" text="Status">
+         <font>
+            <Font size="9.0" />
+         </font></Label>
+      <ProgressBar id="prgPV" fx:id="proPV" layoutY="36.0" prefHeight="0.0" prefWidth="140.0" progress="0.0" style="-fx-accent: red;" styleClass="progress" stylesheets="@ui.css" />
+      <Label fx:id="lblClasse" layoutX="107.0" layoutY="16.0" text="Classe" textAlignment="RIGHT">
+         <font>
+            <Font size="9.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblPV" layoutX="125.0" layoutY="26.0" text="PV" textAlignment="RIGHT" textFill="RED">
+         <font>
+            <Font size="9.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblNivel" layoutX="2.0" layoutY="26.0" text="Nivel">
+         <font>
+            <Font size="9.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblNivel1" layoutX="55.0" layoutY="144.0" text="Espera">
+         <font>
+            <Font size="8.0" />
+         </font>
+      </Label>
+      <ProgressBar id="prgPM" fx:id="proPM" layoutX="-1.0" layoutY="43.0" prefHeight="0.0" prefWidth="140.0" progress="0.0" style="-fx-accent: #0099ff;" styleClass="progress" stylesheets="@ui.css" />
+      <Label fx:id="lblPM" layoutX="108.0" layoutY="26.0" text="PM" textAlignment="RIGHT" textFill="#0099ff">
+         <font>
+            <Font size="9.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

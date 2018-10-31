@@ -18,13 +18,14 @@ package principal;
 
 import personagens.*;
 import java.io.BufferedReader;
-import personagens.Habilidade;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Scanner;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -34,31 +35,62 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-public class Batalha {
+public class Batalha{
 	Equipe aliados;
-	Scanner s;
+        Equipe inimigos;
+        Personagem atacante;
+        String textoFase;
 	boolean vezAliados;
 	boolean fim;
 	Clip clip;
 	static int turno = 0;
+        List<String> fases;
+        Iterator<String> fase;
+        
 	
 	public Batalha(){
-		s = new Scanner(System.in);
 		fim = false;
+                aliados = new Equipe();
+                fases = new LinkedList<>();
+                fase = fases.iterator();
 	}
+        
+        public Equipe getAliados(){
+            return this.aliados;
+        }
+        
+        
+        
+        public Equipe quemJoga(){
+            if(vezAliados){
+                return this.aliados;
+            }
+            return this.inimigos;
+        }
+        
+        public Equipe quemEhAtacado(){
+            if(vezAliados){
+                return this.inimigos;
+            }
+            return this.aliados;
+        }
+        
+        public Equipe getInimigos() {
+            return this.inimigos;
+        }
+        
+        public Classe.Tipo[] getTipos(){
+            return Classe.Tipo.values();
+        }
 	
-	private void playSomEpico(){
+	public void playSomEpico(){
 	        AudioInputStream audioInputStream = null;
 		try {
 			audioInputStream = AudioSystem.getAudioInputStream(new File("epic.wav").getAbsoluteFile());
 			clip = AudioSystem.getClip();
 			clip.open(audioInputStream);
 			clip.start();
-		} catch (UnsupportedAudioFileException ex) {
-			Logger.getLogger(Batalha.class.getName()).log(Level.SEVERE, null, ex);
-		} catch (IOException ex) {
-			Logger.getLogger(Batalha.class.getName()).log(Level.SEVERE, null, ex);
-		} catch (LineUnavailableException ex) {
+		} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
 			Logger.getLogger(Batalha.class.getName()).log(Level.SEVERE, null, ex);
 		} finally {
 			try {
@@ -69,7 +101,7 @@ public class Batalha {
 		}
 	}
 	
-	private void paraSomEpico(){
+	public void paraSomEpico(){
 	    try {
 	        clip.stop();
 	    } catch(Exception ex) {
@@ -85,59 +117,58 @@ public class Batalha {
 		    Thread.currentThread().interrupt();
 		}
 	}
-	
-	public void inicio(){
-		Personagem inimigo;
-		Equipe equipeInimiga;
-		BufferedReader fases;
-		Path arquivo;
-		String linha, nome;
-		Classe.Tipo tipo;
-		int nivel;
-		print("==========================");
-		print("=    O SENHOR DO JAVA    =");
-		print("==========================\n");
-		
-		//ArrayList<Equipe> fases;
-		//escolha dos personagens
-		escolhePersonagens();
-		
-		
-		//crio as fases (batalhas)
-		// = new ArrayList<Equipe>();
-		
-		//leio o arquivo de fases
-		arquivo = Paths.get("game.txt");
-		if(Files.exists(arquivo)){
-			try {
-				fases = Files.newBufferedReader(arquivo);
-				equipeInimiga = new Equipe();
-				
-				while((linha = fases.readLine()) != null){
-					String[] comando = linha.split(" ");
-					if(comando[0].equals("fase")){
-						if(!fim){
-                                                    String texto = linha.substring(4);
-							playSomEpico();
-							Lutar(equipeInimiga, texto);
-							paraSomEpico();
-						}
-						equipeInimiga = new Equipe();
-					}else{
-						nome = comando[0];
-						tipo = selecionaTipo(comando[1]);
-						nivel = Integer.parseInt(comando[2]);
-						inimigo = new Personagem(nome, tipo);
-						inimigo.sobeParaNivel(nivel);
-						equipeInimiga.adicionaPersonagem(inimigo);
-					}
-					
-				}
-			} catch (IOException ex) {
-				Logger.getLogger(Batalha.class.getName()).log(Level.SEVERE, null, ex);
-			}
-		}
-	}
+        
+        public String getTextoFase() {
+            return textoFase;
+        }
+
+        public void setTextoFase(String textoFase) {
+            this.textoFase = textoFase;
+        }
+        
+        public void carregaFases(){
+            Path arquivo = Paths.get("game.txt");
+            List<String> fases_temp = new LinkedList<>();
+            BufferedReader buf_fases;
+            String linha;
+            if(Files.exists(arquivo)){
+                try {
+                        buf_fases = Files.newBufferedReader(arquivo);
+                        while((linha = buf_fases.readLine()) != null){
+                            fases_temp.add(linha);
+                        } 
+                }catch (IOException ex) {
+                    Logger.getLogger(Batalha.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            fases = fases_temp;
+            fase = fases.iterator();
+        }
+        
+        public boolean acabouTudo(){
+            return (fase == null);
+        }
+                
+        public void carregaProximaFase(){
+            inimigos = new Equipe();
+            do{
+                String linha = fase.next();
+                String[] comando = linha.split(" ");
+                if(comando[0].equals("fase")){
+                    textoFase = linha.substring(4);
+                    return;
+                }else{
+                    String nome = comando[0];
+                    Classe.Tipo tipo = selecionaTipo(comando[1]);
+                    int nivel = Integer.parseInt(comando[2]);
+                    Personagem inimigo = new Personagem(nome, tipo);
+                    inimigo.sobeParaNivel(nivel);
+                    inimigos.adicionaPersonagem(inimigo);
+                }
+            }while(fase.hasNext());
+            //Se passar por todas as fases, inimigos null indica fim do jogo
+            inimigos = null;
+        }
 	
 	private Classe.Tipo selecionaTipo(String tipo){
 		Classe.Tipo retorno = null;
@@ -160,159 +191,37 @@ public class Batalha {
 		}
 		return retorno;
 	}
-	public void escolhePersonagens(){
-		this.aliados = new Equipe();
-		Personagem pAux = null;
-		int tipo, i;
-		String nome;
-		
-		print("Crie 3 personagens.");
-		for(i=0;i<3;i++){
-			print("Digite o nome do personagem:");
-			nome = s.nextLine();
-			do{
-				print("Escolha a classe do personagem");
-				print("1 - Guerreiro, 2 - Arqueiro, 3 - Mago, 4 - Anão");
-				tipo = leiaInt();
-			}while(tipo <= 0 || tipo > 4);
-			switch(tipo){
-				case 1:
-					pAux = new Personagem(nome, Classe.Tipo.GUERREIRO);
-					break;
-				case 2:
-					pAux = new Personagem(nome, Classe.Tipo.ARQUEIRO);
-					break;
-				case 3:
-					pAux = new Personagem(nome, Classe.Tipo.MAGO);
-					break;	
-                                case 4:
-                                        pAux = new Personagem(nome, Classe.Tipo.ANAO);
-                                        break;	
-			}
-			aliados.adicionaPersonagem(pAux);
+        
+        public void adicionaAliado(String nome, Classe.Tipo tipo){
+                    if(!nome.trim().isEmpty() && tipo != null){
+                        Personagem p = new Personagem(nome, tipo);
+			aliados.adicionaPersonagem(p);
+                    }
 		}
-		
-	}
-	
+        
+        public boolean rodadaAcabou(){
+            return !(aliados.contaConscientes() > 0 && inimigos.contaConscientes() > 0 && !fim);
+        }
 
-	public void Lutar(Equipe inimigos, String texto){
-		Personagem atacante, amigo;
-		Habilidade habilidade;
-		Equipe adversarios;
-		Personagem adversario;
-		int numAdversario, numAliado;
-
-		int ataque;
-		boolean atacou = false;
-		print("Iniciando batalha "+ (++Batalha.turno) +" entre Aliados e Inimigos:");
-                print(texto);
-		
-		while(aliados.contaConscientes() > 0 && inimigos.contaConscientes() > 0 && !fim){
-			atacou = false;
-			atacante = null;
-			
-			atacante = escolheAtacante(inimigos);
-			
-			if(atacante != null){
-				habilidade = null;
-				amigo = null;
-				adversario = null;
-				espere(2);
-				print("Aliados: ");
-				print(aliados.toString());
-				print("\nInimigos: ");
-				print(inimigos.toString());
-				
-				if(vezAliados){
-					adversarios = inimigos;
-				}else{
-					adversarios = aliados;
-				}
-				
-				do{
-					print("--------------------------------------------------------");
-					print(atacante.getNome()+", escolha seu ataque:");
-					print(atacante.toString());
-					ataque = leiaInt();
-					habilidade = atacante.getClasse().getHabilidade(ataque);
-					
-					if(habilidade != null){
-						
-						if(habilidade.afetaAmigo()){
-							do{
-								print("Escolha seu aliado que receberá "+habilidade.getNome()+":");
-								print(aliados.toString());
-								numAliado = leiaInt();
-								amigo = aliados.getPersonagem(numAliado);
-							}while(amigo == null);
-							atacou = atacante.ataca(habilidade, amigo);
-                                                        print(amigo.getNome()+" recebeu "
-                                                               +habilidade.getNome()+" de "
-                                                               +atacante.getNome()+" removendo "
-                                                               +habilidade.getDano(atacante)+
-                                                                            " de dano.");
-						}else{
-							if(habilidade.afetaTodos()){
-								for(Personagem i: adversarios.getEquipe()){
-									atacou = atacante.ataca(habilidade, i);
-								}
-								print("\nTodos foram afetados por "+habilidade.getNome()+".\n");
-							}else{
-								do{
-									print("Escolha quem recebe o ataque "+habilidade.getNome()+":");
-									print(adversarios.toString());
-									numAdversario = leiaInt();
-									adversario = adversarios.getPersonagem(numAdversario);
-								}while(adversario == null);
-								
-								atacou = atacante.ataca(habilidade, adversario);
-                                                                if(atacou){
-                                                                    print(adversario.getNome()+" recebeu "
-                                                                        +habilidade.getNome()+" de "
-                                                                        +atacante.getNome()+" levando "+
-                                                                            habilidade.getDano(atacante)+
-                                                                            " de dano.");
-                                                                }
-							}
-						}
-					}
-					if(atacou == false){
-						print("Ataque inválido!");
-						if(atacante != null && habilidade != null){
-							if(atacante.getPM() < habilidade.getCustoPM(atacante)){
-								print("Não há pontos de magia suficientes.");
-							}
-						}
-					}
-				}while(atacou == false);
-				
-
-				atacou = false;
-				print("--------------------------");
-				print("Turno finalizado");
-				print("--------------------------\n");
-				espere(3);
-				
-				if(inimigos.contaConscientes() == 0){
-					print("Vitória dos Aliados");
-					aliados.ganharExperiencia(inimigos);
-					aliados.reviverTodos();
-				}else if(aliados.contaConscientes() == 0){
-					print("Vitória dos Inimigos. Fim de jogo...");
-					fim = true;
-				}	
-			}
-			aliados.atualizaTemposEspera();
-			inimigos.atualizaTemposEspera();
-		}
-	}
+        public void terminar(){
+            this.fim = true;
+        }
+        
+        public void atualizaTemposEspera(){
+            aliados.atualizaTemposEspera();
+            inimigos.atualizaTemposEspera();
+        }
 	
 	public void print(String p){
 		System.out.println(p);
 	}
+        
+        public Personagem getAtacante(){
+            return atacante;
+        }
 		
-	private Personagem escolheAtacante(Equipe inimigos){
-		Personagem atacante = null;
+	public Personagem escolheAtacante(){
+		atacante = null;
 		Personagem aliado, inimigo;
 		int sorte = (int)(Math.random()*100);
 		sorte = sorte%2;
@@ -337,17 +246,5 @@ public class Batalha {
 		
 		return atacante;
 	}
-	
-	//como o ID zero não existe no jogo para nada, retorno de zero
-	//sera considerado invalido nas entradas. Assim, esse metodo pode
-	//ser utilizado em todos os menus para entrada de inteiros e se valores
-	//invalidos forem digitados, a entrada eh solicitada 
-	private int leiaInt(){
-		String t = s.nextLine();
-		int r = 0;
-		if(t.matches("-?\\d+(\\.\\d+)?")){
-			r = Integer.parseInt(t);
-		}
-		return r;
-	}
+
 }

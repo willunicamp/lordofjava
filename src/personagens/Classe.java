@@ -23,7 +23,25 @@ public abstract class Classe {
 	ArrayList<Habilidade> habilidades;
 	
 	public enum Tipo{
-		GUERREIRO, ARQUEIRO, MAGO, MONSTRO, ANAO;
+		GUERREIRO("Guerreiro"), 
+                ARQUEIRO("Arqueiro"), 
+                MAGO("Mago"), 
+                MONSTRO("Monstro"), 
+                ANAO("Anao");
+                
+                private String label;
+
+                Tipo(String label) {
+                    this.label = label;
+                }
+                
+                public String Tipo(){
+                    return label;
+                }
+
+                public String toString() {
+                    return label;
+                }
 	}
 	
 	public Classe(int forca, int agilidade, int inteligencia){

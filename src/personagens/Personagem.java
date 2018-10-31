@@ -22,7 +22,9 @@ public class Personagem {
 	private int nivel, PE;
 	private float PV, PM;
 	private int tempoEspera;
-	private Classe classe;
+        private int maxTempoEspera;
+        private Classe classe;
+        private String imagem;
 	private int ID;
 	private static int ID_cont = 1;
 	
@@ -30,6 +32,8 @@ public class Personagem {
 		this.setNome(nome);
 		this.setNivel(1);
 		this.setID();
+                this.imagem = "personagens/imagens/"+classe.toString()+".png";
+                
 		if(classe == Classe.Tipo.GUERREIRO){
 			this.classe = new Guerreiro();
 		}else if(classe == Classe.Tipo.ARQUEIRO){
@@ -45,7 +49,12 @@ public class Personagem {
 		this.setPM(this.getMaxPM());
 		this.setTempoEspera(0);
 		this.setPE(0);
+                this.setMaxTempoEspera(1);
 	}
+        
+        public String getCaminhoImagem(){
+            return this.imagem;
+        }
 	
 	public void reviver(){
 		this.setPV(this.getMaxPV());
@@ -70,6 +79,18 @@ public class Personagem {
 	public int getTempoEspera(){
 		return this.tempoEspera;
 	}
+        
+        public int getMaxTempoEspera() {
+            return maxTempoEspera;
+        }
+
+        public void setMaxTempoEspera(int tempo) {
+                            if(tempo < 1){
+                            this.maxTempoEspera = 1;
+                    }else{
+                            this.maxTempoEspera = tempo;
+                    }
+        }
 	
 	public void setNome(String nome){
 		if(!nome.trim().isEmpty()){
@@ -213,9 +234,17 @@ public class Personagem {
 			this.setPM(this.getPM()-custoMagia);
 			inimigo.tomaDano(dano);
 			this.setTempoEspera(hab.getTempo());
+                        this.setMaxTempoEspera(hab.getTempo());
 			retorno = true;
 		}
 		return retorno;
+	}
+        
+        public boolean ataca(Habilidade hab, Equipe inimigos){
+            for(Personagem inimigo: inimigos.getEquipe()){
+		ataca(hab,inimigo);
+            }
+            return true;
 	}
 	
 	
@@ -233,11 +262,6 @@ public class Personagem {
 	
 	@Override
 	public String toString(){
-		String retorno = "";
-		retorno += (String.format("%1$-3s %2$-18s %3$10s %4$4s %5$4s \n","Id","Habilidade","PM","Espera","Dano"));
-		for(Habilidade h: this.getClasse().getHabilidades()){
-			retorno += (String.format("%1$-3s %2$-18s %3$10s %4$4s %5$4s \n",h.getID(),h.getNome(),h.getCustoPM(this),h.getTempo(),h.getDano(this)));
-		}
-		return retorno;
+		return this.getNome();
 	}
 }

@@ -47,4 +47,5 @@ public class Arqueiro extends Classe{
 	public String toString(){
 		return "Arqueiro";
 	}
+        
 }
