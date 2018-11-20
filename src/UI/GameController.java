@@ -347,7 +347,7 @@ public class GameController implements Initializable {
         //inicializa personagem que sera atacado
         Personagem alvo = null;
         //confere se habilidade e atacante estao ok
-        if (habilidade != null && atacante != null) {
+        if (habilidade != null || atacante != null) {
             //primeiro trata caso onde alvo unico eh afetado
             if (!habilidade.afetaTodos()) {
                 alvo = cmbAlvo.getValue();//pega o alvo no combobox
